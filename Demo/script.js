@@ -88,7 +88,7 @@ function demo() {
 }
 
 function escHTML(htmlStr) {
-  return htmlStr.replace(/</g, `&lt;`)
+  return htmlStr.replace(/</g, `&lt;`).replace(/>/g, '&gt;');
 }
 
 function getNamesObj() {
@@ -129,7 +129,7 @@ function getCodeblocks(templatesDiv) {
   templatesDiv.find$(`template`).each(template => {
     switch (true) {
       case /syntax|tableTemplatesCode|code4Array/.test(template.id): {
-        demoText[template.id] = splatES(codeTemplate, {code: escHTML(template.innerHTML).trim()});
+        demoText[template.id] = escHTML(template.content.textContent); //splatES(codeTemplate, {code: escHTML(template.content.textContent).trim()});
         break;
       }
       default: demoText[template.id] = template.innerHTML;

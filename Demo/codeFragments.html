@@ -1,13 +1,12 @@
 <!-- here are the fragments used in the demo -->
-<template id="syntax">
-// import
+<template id="syntax">// import
 import {interpolateFactory}  from "[module location]";
 //      ^ the interpolateFactory to create an interpolate function
 
 // create an interpolator function with a default replacement value
 // (replaces tokens with empty values with the default replacement value)
 const splatES = interpolateFactory("¡no value!");
-//                                 ∟ missing values are replaced with this
+//                                  ∟ missing values are replaced with this
 const templateStringEx = " hello {wrld} {univrs}\n";
 
 // use splatES function
@@ -40,7 +39,7 @@ templateStringEx[splat](
      hello {wrld} UNIVERSE
      hello WORLD AND UNIVERSE */
 
-// [tokenize$]: remove tokens without values (replace with empty string)
+// [splat$]: remove tokens without values (replace with empty string)
 templateStringEx[splat$](
   {univrs: "UNIVERSE"},
   {wrld: "WORLD", univrs: null},
@@ -61,8 +60,8 @@ someStr[splat](replacement);   // => "Blah [FOOBLAH] and blah and {foo}, but the
 someStr[splat$](replacement);  // => "Blah [FOOBLAH] and blah and  | BARRED]"
 </template>
 
-<template id="tableTemplatesCode">
-// the templates for the following tables
+<template id="tableTemplatesCode">// the templates for the following tables
+// table
 const tableTemplate = `
   &lt;table>
   &lt;caption>{caption}&lt;/caption>
@@ -75,6 +74,8 @@ const tableTemplate = `
   &lt;/thead>
   &lt;tbody>{rows}&lt;/tbody>
   &lt;/table>`;
+
+// row
 const tableRowTemplate = `
   &lt;tr>
     &lt;td>{index}&lt;/td>
@@ -114,7 +115,7 @@ const theNames = [
 // table creation
 const table1 = tableTemplate[splat]({
   caption: `<code>tableRowTemplate[splat]</code> using <code>theNames</code>`,
-  rows: tableRowTemplate[tokenize](...theNames)
+  rows: tableRowTemplate[splat](...theNames)
 });
 
 const table2 = tableTemplate[splat$]({
@@ -123,8 +124,7 @@ const table2 = tableTemplate[splat$]({
 });
 </template>
 
-<template id="code4Array">
-// to fill the next table, a single object with array values is used
+<template id="code4Array">// to fill the next table, a single object with array values is used
 const theNamesTokensAsArrays = {
   pre: [ "Mary", "Muhammed", "Missy", "Hillary", "Foo", "Bar",
     "小平", "Володимир", "zero (0)", "Row", null, "missing value" ],
@@ -133,8 +133,8 @@ const theNamesTokensAsArrays = {
 };
 // table creation
 tableTemplate[splat]({
-  caption: `<code>tableRowTemplate[tokenize]</code> token values are arrays`,
-  rows: tableRowTemplate[tokenize](theNamesTokensAsArrays)
+  caption: `<code>tableRowTemplate[splat]</code> token values are arrays`,
+  rows: tableRowTemplate[splat](theNamesTokensAsArrays)
 });
 </template>
 
