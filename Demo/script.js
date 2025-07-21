@@ -61,7 +61,7 @@ function demo() {
     rows: tableRowTemplate[splat$](...theNamesClear)
   });
   const table3 = tableTemplate[splat]({
-    caption: `<code>tableRowTemplate[spat]</code> token values are arrays`,
+    caption: `<code>tableRowTemplate[splat]</code> token values are arrays`,
     rows: tableRowTemplate[splat](theNamesTokensAsArrays)
   });
   log(
