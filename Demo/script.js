@@ -16,10 +16,10 @@ await retrieveCodeFragments();
 demo();
 
 function demo() {
-  log(...(demoText.links),
-    `!!<hr>${demoText.preSyntax}`,
-    `!!${demoText.syntax}`,
-    `!!<div><h3 class="readme"><b>Templates and tokens used in the examples</b></h3></div>`,);
+  // log(...(demoText.links),
+  //   `!!<hr>${demoText.preSyntax}`,
+  //   `!!${demoText.syntax}`,
+  // );
   const code4Array = demoText.code4Array;
   const tableTemplatesCode = demoText.tableTemplatesCode;
 
@@ -70,12 +70,21 @@ function demo() {
     rows: tableRowTemplate[tokenize](theNamesTokensAsArrays)
   });
   log(
-    `!!${tableTemplatesCode}`,
-    `!!${table1}`,
-    `!!${table2}`,
-    `!!<h3 class="readme"><b>Use corresponding arrays</b></h3>`,
-    `!!${code4Array}`,
-    `!!${table3}` );
+    $.div({data: {header: "true"}},
+      $.hr(),
+      demoText.preSyntax,
+      demoText.codeFragment[tokenize]({code: demoText.syntax}),
+      $.h3({class: "readme"}, $.b(`Templates and tokens used in the examples`)),
+      demoText.codeFragment[tokenize]({code: tableTemplatesCode}),
+      $.h3({class: "readme"}, $.b(`table1 =>`)),
+      table1,
+      $.h3({class: "readme"}, $.b(`table2 =>`)),
+      table2,
+      $.h3({class: "readme"}, $.b(`Use corresponding arrays`)),
+      demoText.codeFragment[tokenize]({code: code4Array}),
+      table3
+    )
+  );
   createContent();
   hljs.highlightAll(`javascript`);
 }
@@ -149,16 +158,17 @@ function getLinks() {
     isLocal
       ? `!!LOCAL TEST`
       :  isGithub
-        ? `!!<a class="ghBacklink "target="_top" href="https://github.com/KooiInc/SplatES">${back2repo}</a>`
+        ? `!!<a class="ghBacklink" "target="_top" href="https://github.com/KooiInc/SplatES">${back2repo}</a>`
         : `!!<a class="cbBacklink" target="_top" href="https://codeberg.org/KooiInc/splatES">${back2repo}</a>`
   ];
 }
 
 /* region indexCreatr */
 function createContent() {
-  $(`<div class="container">`).append($(`#log2screen`));
+  const logUl = $(`#log2screen`);
+  $(`<div class="container">`).append(logUl);
   $.editCssRule(`.bottomSpace { height: ${$.node(`.container`).clientHeight}px; }`);
-  $(`#log2screen`).afterMe(`<div class="bottomSpace">`);
+  logUl.afterMe(`<div class="bottomSpace">`);
 }
 /* endregion indexCreatr */
 
@@ -175,15 +185,15 @@ function setStyling() {
       vertical-align: top;
       min-width: 500px;
       max-width: 700px;
-      
+
       td, th {
         padding: 2px 4px;
         font-size: 14px;
         height: 18px;
       }
-      
+
       /*td:nth-child(2n), th:nth-child(2n) { width: 200px; }*/
-      
+
       th {
         font-weight: bold;
         text-align: left;
@@ -191,19 +201,19 @@ function setStyling() {
         background-color: #999;
         color: #FFF;
       }
-      
+
       td:first-child, th:first-child {
         text-align: right; padding-right: 5px;
         width: 24px;
       }
-      
+
       caption {
         border: 1px solid #ccc;
         padding: 0.5rem;
         font-size: 14px;
         white-space: nowrap;
        }
-       
+
        tbody tr:nth-child(even) { background-color: #ddd; }
      }`,
 
@@ -224,9 +234,18 @@ function setStyling() {
      }`,
 
     `b.notifyHeader { color: green; }`,
-    `li.head {margin-left: -2rem !important;}`,
-    `li.head table {margin-top: 1.2rem;}`,
-    `li.head hr {margin-bottom: 1.2rem;}`,
+
+    `li.head {
+      margin-left: -2rem !important;
+
+      table { margin-top: 1.2rem; }
+
+      hr { margin-bottom: 1.2rem; }
+      h3.readme { margin-bottom: 0; margin-top: 0.5em;}
+      h3.readme~pre, h3.readme~table { margin-top: 0.2em; }
+
+    }`,
+
     `a { text-decoration:none; font-weight:bold; }`,
     `a:hover { text-decoration:underline; }`,
     `a[target]:before { color:rgba(0,0,238,0.7);font-size: 1.1rem;vertical-align:bottom }`,
@@ -246,19 +265,24 @@ function setStyling() {
       }
      }`,
     `a[target="_top"]:before {content: '\\21BA'' '; }`,
+
     `ul#log2screen { margin: 0 auto; max-width: 40vw; }`,
+
     `pre.hljs {
       border-radius: 8px;
       box-shadow: 1px 2px 8px #555;
     }`,
+
     `#log2screen pre.syntax {
       margin-top: -0.7rem;
       margin-bottom: 1.5rem;
     }`,
+
     `#log2screen code.language-javascript {
       background-color: revert;
       color: revert;
     }`,
+
     `pre.syntax { width: 100%; }`,
     `.readme {
       margin-top: -0.4rem;
@@ -266,6 +290,7 @@ function setStyling() {
       color: #777;
       font-weight: normal;
     }`,
+
     `@media (min-width: 1600px) {
       ul#log2screen  { max-width: 50vw; }
     }`,
