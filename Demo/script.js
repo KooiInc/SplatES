@@ -123,13 +123,10 @@ function getNamesObj() {
 }
 
 function getCodeblocks(templatesDiv) {
-  const codeTemplate =
-    `<pre class="syntax hljs language-javascript"
-        ><code class="hljs language-javascript">{code}</code></pre>`;
   templatesDiv.find$(`template`).each(template => {
     switch (true) {
       case /syntax|tableTemplatesCode|code4Array/.test(template.id): {
-        demoText[template.id] = escHTML(template.content.textContent); //splatES(codeTemplate, {code: escHTML(template.content.textContent).trim()});
+        demoText[template.id] = escHTML(template.content.textContent);
         break;
       }
       default: demoText[template.id] = template.innerHTML;
