@@ -138,17 +138,26 @@ tableTemplate[tokenize]({
 </template>
 
 <template id="codeFragment">
-  <pre class="hljs language-javascript"><code class="hljs language-javascript">{code}</code></pre>
+  <pre class="hljs"><code class="hljs language-javascript">{code}</code></pre>
 </template>
 
 <template id="preSyntax">
-    <div class="readme">The module exports the factory itself (<code>interpolateFactory</code>),
+  <h2>Splat ES</h2>
+  <hr>
+  <div class="pre-syntax">
+    <div class="readme">The <code>splatES</code> module exports the factory itself (<code>interpolateFactory</code>),
     the <code>interpolate</code> function (default) and the <code>interpolateClear</code> function (which
     clears empty placeholders).</div>
 
-    <div class="readme">Importing the module also provides two <code>Symbol</code>s that are used to extend
+    <div class="readme">Importing the module also provides two <code>Symbol</code>s used to extend
       <code>String.prototype</code> (<code>Symbol.for("interpolate")</code> and
-      <code>Symbol.for("interpolate$")</code>).</div>
+      <code>Symbol.for("interpolate$")</code>).
 
-    <h3 class="readme"><b>Syntax by example</b></h3>
+      <div class="b5">
+        <b>Note</b>: extending native ES Objects this way will
+        <i>never</i> clash with eventual (prototype) extensions from other libraries/modules.
+      </div>
+    </div>
+  </div>
+  <h3 class="readme"><b>Syntax by example</b></h3>
 </template>

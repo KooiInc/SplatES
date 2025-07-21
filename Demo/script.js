@@ -16,10 +16,6 @@ await retrieveCodeFragments();
 demo();
 
 function demo() {
-  // log(...(demoText.links),
-  //   `!!<hr>${demoText.preSyntax}`,
-  //   `!!${demoText.syntax}`,
-  // );
   const code4Array = demoText.code4Array;
   const tableTemplatesCode = demoText.tableTemplatesCode;
 
@@ -71,7 +67,6 @@ function demo() {
   });
   log(
     $.div({data: {header: "true"}},
-      $.hr(),
       demoText.preSyntax,
       demoText.codeFragment[tokenize]({code: demoText.syntax}),
       $.h3({class: "readme"}, $.b(`Templates and tokens used in the examples`)),
@@ -176,7 +171,31 @@ function setStyling() {
   const repeat = (str, n = 2) => `${str}${Array(n).join(str)}`;
   $.editCssRules(
     `body { font: 14px/18px normal verdana, arial; margin: 2rem; }`,
+
     `.container { position: absolute; inset: 0; overflow-y: auto; }`,
+
+    `code.hljs {
+      background-color: #343636;
+    }`,
+
+    `code:not(.codeblock, .hljs) {
+        background-color: rgb(227, 230, 232);
+        color: var(--code-color);
+        padding: 1px 2px;
+        display: inline-block;
+        margin: 1px 0;
+        border-radius: 4px;
+        font-style: normal;
+        font-weight: normal;
+    }`,
+
+    `div.b5 { margin-top: 5px; }`,
+
+    `.pre-syntax { 
+      max-width: 90%;
+      padding-left: 1em; 
+    }`,
+
     `table {
       margin: 1rem 0;
       font-family: verdana;
@@ -191,8 +210,6 @@ function setStyling() {
         font-size: 14px;
         height: 18px;
       }
-
-      /*td:nth-child(2n), th:nth-child(2n) { width: 200px; }*/
 
       th {
         font-weight: bold;
