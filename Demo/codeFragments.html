@@ -6,19 +6,19 @@ import {interpolateFactory}  from "[module location]";
 
 // create an interpolator function with a default replacement value
 // (replaces tokens with empty values with the default replacement value)
-const insert = interpolateFactory("¡no value!");
+const splat = interpolateFactory("¡no value!");
 const templateStringEx = " hello {wrld} {univrs}\n";
 
-// use insert
-insert(
+// use splat
+splat(
   templateStringEx,
   {wrld: "WORLD", univrs: null},
   {wrld: null, univrs: "UNIVERSE"},
   {wrld: "WORLD", univrs: "AND UNIVERSE"} );
   /* result =>
-  hello WORLD ¡no value!
-  hello ¡no value! UNIVERSE
-  hello WORLD AND UNIVERSE */
+     hello WORLD ¡no value!
+     hello ¡no value! UNIVERSE
+     hello WORLD AND UNIVERSE */
 
 // On importing interpolateFactory String.prototype
 // was extended using 2 Symbols. Here we
@@ -34,10 +34,10 @@ templateStringEx[tokenize](
   {wrld: null, univrs: "UNIVERSE"},
   {wrld: "WORLD", univrs: "AND UNIVERSE"} );
   /* result =>
-  hello WORLD (Note: missing tokens are ignored) {univrs}
-  hello WORLD {univrs}
-  hello {wrld} UNIVERSE
-  hello WORLD AND UNIVERSE */
+     hello WORLD (Note: missing tokens are ignored) {univrs}
+     hello WORLD {univrs}
+     hello {wrld} UNIVERSE
+     hello WORLD AND UNIVERSE */
 
 // [tokenize$]: remove tokens without values (replace with empty string)
 templateStringEx[tokenize$](
@@ -46,12 +46,12 @@ templateStringEx[tokenize$](
   {wrld: null, univrs: "UNIVERSE"},
   {wrld: "WORLD", univrs: "AND UNIVERSE"} );
   /* result =>
-  hello  UNIVERSE (Note: missing tokens are cleared)
-  hello WORLD
-  hello  UNIVERSE
-  hello WORLD AND UNIVERSE */
+     hello  UNIVERSE (Note: missing tokens are cleared)
+     hello WORLD
+     hello  UNIVERSE
+     hello WORLD AND UNIVERSE */
 
-// escaped "{" and/or "}" and non existing token values are ignored
+// escaped "{" and/or "}" ("\{", "\}") and non existing token values are ignored
 const replacement = { blah: "FOOBLAH", bar: "BARRED" };
 const someStr = "Blah [{blah}] and blah and {foo}, but then again [\{bar\} | {bar}]";
 //                                           ^                     ^ escaped/ignored
@@ -62,28 +62,28 @@ someStr[tokenize$](replacement); => "Blah [FOOBLAH] and blah and  | BARRED]"
 
 <template id="tableTemplatesCode">
 // the templates for the following tables
-const tableTemplate = "
-  &lt;table>\
-  &lt;caption>{caption}&lt;/caption>\
-  &lt;thead>\
+const tableTemplate = `
+  &lt;table>
+  &lt;caption>{caption}&lt;/caption>
+  &lt;thead>
     &lt;tr>
-      &lt;th>#&lt;/th>\
-      &lt;th>prename&lt;/th>\
-      &lt;th>surname&lt;/th>\
-    &lt;/tr>\
-  &lt;/thead>\
+      &lt;th>#&lt;/th>
+      &lt;th>prename&lt;/th>
+      &lt;th>surname&lt;/th>
+    &lt;/tr>
+  &lt;/thead>
   &lt;tbody>{rows}&lt;/tbody>
-  &lt;/table>";
-const tableRowTemplate = "
-  &lt;tr>\
-    &lt;td>{index}&lt;/td>\
-    &lt;td>{pre}&lt;/td>\
-    &lt;td>{last}&lt;/td>\
-  &lt;/tr>";
-/* ∟ Note:
-    adding {index} in the template string is optional.
-    It will be automatically replaced with the index
-    (starting with 1) of the insertion */
+  &lt;/table>`;
+const tableRowTemplate = `
+  &lt;tr>
+    &lt;td>{index}&lt;/td>
+    &lt;td>{pre}&lt;/td>
+    &lt;td>{last}&lt;/td>
+  &lt;/tr>`
+  /* ∟ Note:
+     adding {index} in the template string is optional.
+     It will be automatically replaced with the index
+     (starting with 1) of the splat insertion */;
 
 /* the tokens used for tableRowTemplate */
 const theNames = [
@@ -122,7 +122,7 @@ const theNamesTokensAsArrays = {
 </template>
 
 <template id="codeFragment">
-  <pre class="syntax language-javascript line-numbers"><code class="language-javascript">{code}</code></pre>
+  <pre class="syntax hljs language-javascript"><code class="language-javascript">{code}</code></pre>
 </template>
 
 <template id="preSyntax">

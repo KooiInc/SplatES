@@ -16,10 +16,13 @@ await retrieveCodeFragments();
 demo();
 
 function demo() {
-  log(...(demoText.links), `!!<hr>${demoText.preSyntax}${demoText.syntax}`);
+  log(...(demoText.links),
+    `!!<hr>${demoText.preSyntax}`,
+    `!!${demoText.syntax}`,
+    `!!<div><h3 class="readme"><b>Templates and tokens used in the examples</b></h3></div>`,);
   const code4Array = demoText.code4Array;
   const tableTemplatesCode = demoText.tableTemplatesCode;
-  
+
   // let's create a table
   const tableTemplate = `
     <table>
@@ -52,7 +55,7 @@ function demo() {
     last: `Peterson,Ali,Johnson,Clinton,Bar,Foo,邓,Зеленський,0,10,<span class="point left"></span> missing value,`
       .split(`,`).map(v => !v.length ? null : v)
   }
-  
+
   // show me the money!
   const table1 = tableTemplate[tokenize]({
     caption: `<code>tableRowTemplate[tokenize]</code> using <code>theNames</code>`,
@@ -73,8 +76,8 @@ function demo() {
     `!!<h3 class="readme"><b>Use corresponding arrays</b></h3>`,
     `!!${code4Array}`,
     `!!${table3}` );
-  Prism.highlightAll();
   createContent();
+  hljs.highlightAll(`javascript`);
 }
 
 function escHTML(htmlStr) {
@@ -114,8 +117,8 @@ function getNamesObj() {
 
 function getCodeblocks(templatesDiv) {
   const codeTemplate =
-    `<pre class="syntax language-javascript line-numbers"
-        ><code class="language-javascript">{code}</code></pre>`;
+    `<pre class="syntax hljs language-javascript"
+        ><code class="hljs language-javascript">{code}</code></pre>`;
   templatesDiv.find$(`template`).each(template => {
     switch (true) {
       case /syntax|tableTemplatesCode|code4Array/.test(template.id): {
@@ -125,7 +128,7 @@ function getCodeblocks(templatesDiv) {
       default: demoText[template.id] = template.innerHTML;
     }
   });
-  
+
   demoText.links = getLinks();
 }
 
@@ -193,6 +196,7 @@ function setStyling() {
         text-align: right; padding-right: 5px;
         width: 24px;
       }
+      
       caption {
         border: 1px solid #ccc;
         padding: 0.5rem;
@@ -202,19 +206,23 @@ function setStyling() {
        
        tbody tr:nth-child(even) { background-color: #ddd; }
      }`,
+
     `.largeArrowDown:before{
       content: '${repeat(`⬇`, 3)}';
       color: red; }`,
+
     `span.point:before {
       font-weight: bold;
       color: red;
       content: '➜';
       vertical-align: middle;
     }`,
+
     `span.point.left:before {
       display: inline-block;
       transform: rotate(-180deg);
      }`,
+
     `b.notifyHeader { color: green; }`,
     `li.head {margin-left: -2rem !important;}`,
     `li.head table {margin-top: 1.2rem;}`,
@@ -223,12 +231,14 @@ function setStyling() {
     `a:hover { text-decoration:underline; }`,
     `a[target]:before { color:rgba(0,0,238,0.7);font-size: 1.1rem;vertical-align:bottom }`,
     `a[target="_blank"]:before {content: '\\2197'' '; }`,
+
     `a[target].cbBacklink {
       &:before {
         content: url(./codebergicon.ico)' ';
         vertical-align: middle;
       }
      }`,
+
     `a[target].ghBacklink {
       &:before {
         content: url(./githubicon.png)' ';
@@ -237,6 +247,10 @@ function setStyling() {
      }`,
     `a[target="_top"]:before {content: '\\21BA'' '; }`,
     `ul#log2screen { margin: 0 auto; max-width: 40vw; }`,
+    `pre.hljs {
+      border-radius: 8px;
+      box-shadow: 1px 2px 8px #555;
+    }`,
     `#log2screen pre.syntax {
       margin-top: -0.7rem;
       margin-bottom: 1.5rem;
