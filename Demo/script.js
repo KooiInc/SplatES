@@ -4,10 +4,9 @@
 const { $, logFactory,  } =
   await import("https://cdn.jsdelivr.net/gh/KooiInc/SBHelpers/index.browser.bundled.js");
 import {default as interpolate, interpolateFactory} from "../Bundle/index.min.js";
-const tokenize = Symbol.for("interpolate");
-const tokenize$ = Symbol.for("interpolate$");
+const splat = Symbol.for("interpolate");
+const splat$ = Symbol.for("interpolate$");
 // try out in developer screen
-window.tokenize = tokenize;
 window.interpolate = interpolate;
 const { log } = logFactory();
 const demoText = {};
@@ -53,30 +52,30 @@ function demo() {
   }
 
   // show me the money!
-  const table1 = tableTemplate[tokenize]({
-    caption: `<code>tableRowTemplate[tokenize]</code> using <code>theNames</code>`,
-    rows: tableRowTemplate[tokenize](...theNames)
+  const table1 = tableTemplate[splat]({
+    caption: `<code>tableRowTemplate[splat]</code> using <code>theNames</code>`,
+    rows: tableRowTemplate[splat](...theNames)
   });
-  const table2 = tableTemplate[tokenize]({
-    caption: `<code>tableRowTemplate[tokenize$]</code> (empty/invalid values => empty string)`,
-    rows: tableRowTemplate[tokenize$](...theNamesClear)
+  const table2 = tableTemplate[splat]({
+    caption: `<code>tableRowTemplate[splat$]</code> (empty/invalid values => empty string)`,
+    rows: tableRowTemplate[splat$](...theNamesClear)
   });
-  const table3 = tableTemplate[tokenize]({
-    caption: `<code>tableRowTemplate[tokenize]</code> token values are arrays`,
-    rows: tableRowTemplate[tokenize](theNamesTokensAsArrays)
+  const table3 = tableTemplate[splat]({
+    caption: `<code>tableRowTemplate[spat]</code> token values are arrays`,
+    rows: tableRowTemplate[splat](theNamesTokensAsArrays)
   });
   log(
     $.div({data: {header: "true"}},
       demoText.preSyntax,
-      demoText.codeFragment[tokenize]({code: demoText.syntax}),
+      demoText.codeFragment[splat]({code: demoText.syntax}),
       $.h3({class: "readme"}, $.b(`Templates and tokens used in the examples`)),
-      demoText.codeFragment[tokenize]({code: tableTemplatesCode}),
+      demoText.codeFragment[splat]({code: tableTemplatesCode}),
       $.h3({class: "readme"}, $.b(`table1 =>`)),
       table1,
       $.h3({class: "readme"}, $.b(`table2 =>`)),
       table2,
       $.h3({class: "readme"}, $.b(`Use corresponding arrays`)),
-      demoText.codeFragment[tokenize]({code: code4Array}),
+      demoText.codeFragment[splat]({code: code4Array}),
       table3
     )
   );
