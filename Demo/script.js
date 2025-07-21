@@ -3,11 +3,15 @@
 // -----------------------------------------------------------------------
 const { $, logFactory,  } =
   await import("https://cdn.jsdelivr.net/gh/KooiInc/SBHelpers/index.browser.bundled.js");
-import {default as interpolate, interpolateFactory} from "../Bundle/index.min.js";
+import {default as splatES, interpolateFactory} from "../Bundle/index.min.js";
+
+// assign symbolic String.prototype extension
 const splat = Symbol.for("interpolate");
 const splat$ = Symbol.for("interpolate$");
+
 // try out in developer screen
-window.interpolate = interpolate;
+window.splatES = splatES;
+
 const { log } = logFactory();
 const demoText = {};
 await retrieveCodeFragments();
@@ -66,7 +70,7 @@ function demo() {
   });
   log(
     $.div({data: {header: "true"}},
-      demoText.preSyntax,
+      demoText.preSyntax[splat]({backLink: demoText.backLink}),
       demoText.codeFragment[splat]({code: demoText.syntax}),
       $.h3({class: "readme"}, $.b(`Templates and tokens used in the examples`)),
       demoText.codeFragment[splat]({code: tableTemplatesCode}),
@@ -125,14 +129,14 @@ function getCodeblocks(templatesDiv) {
   templatesDiv.find$(`template`).each(template => {
     switch (true) {
       case /syntax|tableTemplatesCode|code4Array/.test(template.id): {
-        demoText[template.id] = interpolate(codeTemplate, {code: escHTML(template.innerHTML).trim()});
+        demoText[template.id] = splatES(codeTemplate, {code: escHTML(template.innerHTML).trim()});
         break;
       }
       default: demoText[template.id] = template.innerHTML;
     }
   });
 
-  demoText.links = getLinks();
+  demoText.backLink = getBackLink();
 }
 
 async function retrieveCodeFragments() {
@@ -144,16 +148,16 @@ async function retrieveCodeFragments() {
     } );
 }
 
-function getLinks() {
+function getBackLink() {
   const isGithub = /github/i.test(location.href);
   const back2repo = `(back to) repository`;
   const isLocal = /localhost/.test(location.href);
   return [
     isLocal
-      ? `!!LOCAL TEST`
+      ? `LOCAL TEST`
       :  isGithub
-        ? `!!<a class="ghBacklink" "target="_top" href="https://github.com/KooiInc/SplatES">${back2repo}</a>`
-        : `!!<a class="cbBacklink" target="_top" href="https://codeberg.org/KooiInc/splatES">${back2repo}</a>`
+        ? `<a class="ghBacklink" target="_top" href="https://github.com/KooiInc/SplatES">${back2repo}</a>`
+        : `<a class="cbBacklink" target="_top" href="https://codeberg.org/KooiInc/splatES">${back2repo}</a>`
   ];
 }
 
