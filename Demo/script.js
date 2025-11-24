@@ -2,19 +2,17 @@
 // 20240612
 // -----------------------------------------------------------------------
 const { $, logFactory,  } =
-  await import("https://cdn.jsdelivr.net/gh/KooiInc/SBHelpers/index.browser.bundled.js");
-import {default as splatES, interpolateFactory} from "../Bundle/index.min.js";
+  await import("https://unpkg.com/dynamic-html-helpers@latest/Bundle/htmlhelpers.min.js");
+import {default as splatES, addSymbolicStringExtensions} from "../Bundle/index.min.js";
 
 // assign symbolic String.prototype extension
-const splat = Symbol.for("interpolate");
-const splat$ = Symbol.for("interpolate$");
+const [splat, splat$] = addSymbolicStringExtensions();
 
 // try out in developer screen
 window.splatES = splatES;
 
 const { log } = logFactory();
-const demoText = {};
-await retrieveCodeFragments();
+const demoText = retrieveCodeFragments();
 
 demo();
 
@@ -109,9 +107,9 @@ function getNamesObj() {
       last: `<span class="largeArrowDown"></span>`
     },
     // if !defaultReplacer ...
-    {pre: `replacement-Is-array`, last: [1, 2, 3]},       // ᐊ Array value IS NOT replaced/
+    {pre: `replacement-Is-array`, last: [1, 2, 3]},     // ᐊ Array value IS NOT replaced/
     {pre: `replacement-Is-null`, last: null},           // ᐊ null value IS NOT replaced
-    {pre: `replacement-Is-object`, last: {}},          // ᐊ Object value IS NOT replaced
+    {pre: `replacement-Is-object`, last: {}},           // ᐊ Object value IS NOT replaced
     {pre: `replacement-Is-undefined`, last: undefined}, // ᐊ undefined value IS NOT replaced
     {last: `key-pre-does-not-exist`},                   // ᐊ undefined value IS NOT replaced
     {pre: `key-last-does-not-exist`},                   // ᐊ incomplete object, what exists is replaced
@@ -122,27 +120,26 @@ function getNamesObj() {
   ];
 }
 
-function getCodeblocks(templatesDiv) {
-  templatesDiv.find$(`template`).each(template => {
+function getInsertableblocks(templatesDivs) {
+  const demoText = [];
+  templatesDivs.forEach(block => {
     switch (true) {
-      case /syntax|tableTemplatesCode|code4Array/.test(template.id): {
-        demoText[template.id] = escHTML(template.content.textContent);
+      case /syntax|tableTemplatesCode|code4Array/.test(block.id): {
+        demoText[block.id] = $.escHtml(block.textContent).replace(/^ {8}/gm, ``).trim();
         break;
       }
-      default: demoText[template.id] = template.innerHTML;
+      default:
+        demoText[block.id] = block.innerHTML;
     }
   });
-
+  
   demoText.backLink = getBackLink();
+  return demoText;
 }
 
-async function retrieveCodeFragments() {
-  $.allowTag(`template`);
-  await fetch(`./codeFragments.html`)
-    .then( r => r.text())
-    .then( r => {
-      getCodeblocks($(`<div>${r}</div>`))
-    } );
+function retrieveCodeFragments() {
+  const codeBlocks = $.node(`#exampleTexts`).content.querySelectorAll('div');
+  return getInsertableblocks(codeBlocks);
 }
 
 function getBackLink() {
@@ -191,9 +188,9 @@ function setStyling() {
 
     `div.b5 { margin-top: 5px; }`,
 
-    `.pre-syntax { 
+    `.pre-syntax {
       max-width: 90%;
-      padding-left: 1em; 
+      padding-left: 1em;
     }`,
 
     `table {
@@ -260,7 +257,9 @@ function setStyling() {
       hr { margin-bottom: 1.2rem; }
       h3.readme { margin-bottom: 0; margin-top: 0.5em;}
       h3.readme~pre, h3.readme~table { margin-top: 0.2em; }
-
+            div.readme li {
+        margin: 0.1em 0 0.2em -1.5rem !important;
+      }
     }`,
 
     `a { text-decoration:none; font-weight:bold; }`,

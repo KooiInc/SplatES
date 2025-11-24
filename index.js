@@ -1,22 +1,12 @@
-import IS from "./toaFactory.js";
+import IS from "./Resource/toaModule.js";
 
-const interpolateDefault = interpolateFactory(undefined);
+const interpolateDefault = interpolateFactory();
 const interpolateClear = interpolateFactory("");
-
-/**
- * Extend String.prototype using the above two
- * interpolate methods.
- * Note: Symbols are unique, so there is no risk the
- * methods overwrite things in other ES libraries.
- */
-Object.defineProperties(String.prototype, {
-  [Symbol.for(`interpolate`)]: { value(...args) { return interpolateDefault(this, ...args); } },
-  [Symbol.for(`interpolate$`)]: { value(...args) { return interpolateClear(this, ...args); } },
-} );
 
 export {
   interpolateDefault as default,
   interpolateClear,
+  addSymbolicStringExtensions,
   interpolateFactory,
 };
 
@@ -25,9 +15,15 @@ export {
  * @param {string|number} defaultReplacer - Default value to use for missing tokens.
  * @returns {Function} - The interpolation function.
  */
-function interpolateFactory(defaultReplacer) {
+function interpolateFactory(defaultReplacer, specs = {}) {
+  const {useSymbolicExtensions} = specs;
   defaultReplacer = IS(defaultReplacer, String, Number) ?
     String(defaultReplacer) : undefined;
+  
+  if (!!useSymbolicExtensions) {
+    addSymbolicStringExtensions();
+  }
+  
   /**
    * Main interpolation function.
    * @param {string} str - The string with placeholders.
@@ -135,4 +131,30 @@ function interpolateFactory(defaultReplacer) {
     return IS(defaultReplacer, undefined)
       ? injected : injected.replace(/\{[a-z_\d].+\}/gim, String(defaultReplacer));
   }
+}
+
+/**
+ * Extend String.prototype using the above two
+ * interpolate methods.
+ * Note: Symbols are unique, so there is no risk the
+ * methods will conflict with native String methods or
+ * methods in other ES libraries.
+ */
+function addSymbolicStringExtensions() {
+  if (!String.prototype[Symbol.for(`interpolate`)]) {
+    Object.defineProperties(String.prototype, {
+      [Symbol.for(`interpolate`)]: {
+        value(...args) {
+          return interpolateDefault(this, ...args);
+        }
+      },
+      [Symbol.for(`interpolate$`)]: {
+        value(...args) {
+          return interpolateClear(this, ...args);
+        }
+      },
+    });
+  }
+  
+  return [Symbol.for("interpolate"), Symbol.for(`interpolate$`)];
 }
