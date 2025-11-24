@@ -52,6 +52,6 @@ or the **[DEMO @Github](https://kooiinc.github.io/SplatES/Demo)**.
 // the module is located at /index.js, 
 // or bundled at /Bundle/index.min.js
 import {default as splat /* [, interpolateClear, interpolateFactory, addSymbolicStringExtensions] */}
-  from "[path/to]/Interpolate.node.js]";
+  from "[module location]";
 splat(hi, {wrld: "world"}); // "hi world"
 ```
