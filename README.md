@@ -44,7 +44,7 @@ or the **[DEMO @Github](https://kooiinc.github.io/SplatES/Demo)**.
 <script>
   const {default: splat /* [, interpolateClear, interpolateFactory, addSymbolicStringExtensions] */} = 
       SplatES;
-  splat(hi, {wrld: "world"}); // "hi world"
+  splat("hi {wrld}, ", {wrld: "world"}, {wrld: "universe"}); // "hi world, hi universe, " 
 </script>
 ```
 
@@ -54,5 +54,5 @@ or the **[DEMO @Github](https://kooiinc.github.io/SplatES/Demo)**.
 // or bundled at /Bundle/index.min.js
 import {default as splat /* [, interpolateClear, interpolateFactory, addSymbolicStringExtensions] */}
   from "[module location]";
-splat(hi, {wrld: "world"}); // "hi world"
+splat("hi {wrld}, ", {wrld: "world"}, {wrld: "universe"}); // "hi world, hi universe, "
 ```
