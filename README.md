@@ -42,7 +42,8 @@ or the **[DEMO @Github](https://kooiinc.github.io/SplatES/Demo)**.
 <!-- the browser script is located at /Bundle/index.script.min.js -->
 <script src="[browser script location]"></script>
 <script>
-  const {default: splat /* [, interpolateClear, interpolateFactory, addSymbolicStringExtensions] */} = SplatES;
+  const {default: splat /* [, interpolateClear, interpolateFactory, addSymbolicStringExtensions] */} = 
+      SplatES;
   splat(hi, {wrld: "world"}); // "hi world"
 </script>
 ```

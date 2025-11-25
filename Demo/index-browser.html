@@ -1,6 +1,6 @@
 <html lang="en">
   <head>
-    <title>JS-Interpolate BROWSER Demo</title>
+    <title>SplatES Demo BROWSER</title>
     <meta charset="UTF-8">
     <link href="./codebergicon.ico" rel="icon" type="image/x-icon"/>
     <link href="./rainbow.min.css" rel="stylesheet">
@@ -17,13 +17,13 @@
         // script location: /Bundle/index.script.min.js
         // The script creates (globally): SplatES. Retrieve relevant functions:
         const {interpolateFactory, addSymbolicStringExtensions} = SplatES;
-        //     |                   ∟ function to add symbolic extensions to String.prototype
-        //     ∟ the interpolateFactory to create an interpolate function
+        //     ↑                   ↑ function to add symbolic extensions to String.prototype
+        //     ↑ the interpolateFactory to create an interpolate function
 
         // create an interpolator function with a default replacement value
         // (replaces tokens with empty values with the default replacement value)
         const splatES = interpolateFactory("¡no value!");
-        //                                  ∟ missing values are replaced with this
+        //                                  ↑ missing values are replaced with this
         const templateStringEx = " hello {wrld} {univrs}\n";
 
         // use splatES function
@@ -32,7 +32,7 @@
           {wrld: "WORLD", univrs: null},
           {wrld: null, univrs: "UNIVERSE"},
           {wrld: "WORLD", univrs: "AND UNIVERSE"} );
-        /* result =>
+        /* result ↓
            hello WORLD ¡no value!
            hello ¡no value! UNIVERSE
            hello WORLD AND UNIVERSE */
@@ -49,7 +49,7 @@
           {wrld: "WORLD", univrs: null},
           {wrld: null, univrs: "UNIVERSE"},
           {wrld: "WORLD", univrs: "AND UNIVERSE"} );
-        /* result =>
+        /* result ↓
            hello WORLD (Note: missing tokens are ignored) {univrs}
            hello WORLD {univrs}
            hello {wrld} UNIVERSE
@@ -61,7 +61,7 @@
           {wrld: "WORLD", univrs: null},
           {wrld: null, univrs: "UNIVERSE"},
           {wrld: "WORLD", univrs: "AND UNIVERSE"} );
-        /* result =>
+        /* result ↓
            hello  UNIVERSE (Note: missing tokens are cleared)
            hello WORLD
            hello  UNIVERSE
@@ -70,8 +70,8 @@
         // escaped "{" and/or "}" ("\{", "\}") and non existing token values are ignored
         const replacement = { blah: "FOOBLAH", bar: "BARRED" };
         const someStr = "Blah [{blah}] and blah and {foo}, but then again [\{bar\} | {bar}]";
-        //                                           |                     ∟ escaped/ignored
-        //                                           ∟ not in [replacement]/ignored
+        //                                           ↑                     ↑ escaped/ignored
+        //                                           ↑ not in [replacement]/ignored
         someStr[splat](replacement);   // => "Blah [FOOBLAH] and blah and {foo}, but then again [\{bar\} | BARRED]"
         someStr[splat$](replacement);  // => "Blah [FOOBLAH] and blah and  | BARRED]"
       </div>
@@ -98,10 +98,10 @@
             &lt;td>{pre}&lt;/td>
             &lt;td>{last}&lt;/td>
           &lt;/tr>`
-        /* ∟ Note:
-        adding {index} in the template string is optional.
-        It will be automa(t/g)ically replaced with the index
-        (starting with 1) of the splat insertion */;
+        /* ↑ Note:
+          adding {index} in the template string is optional.
+          It will be automa(t/g)ically replaced with the index
+          (starting with 1) of the splat insertion */;
 
         /* the tokens used for tableRowTemplate */
         const theNames = [
@@ -115,7 +115,7 @@
           {pre: "Володимир", last: "Зеленський"},
           {pre: "zero (0)", last: 0},
           {pre: "Row", last: 10},
-          // ignored/cleared values
+          // ignored/cleared values ↓
           {pre: "replacement-is-empty-string", last: ''},     // ᐊ Empty string value IS replaced
           {pre: "replacement-Is-array", last: [1, 2, 3]},     // ᐊ Array value IS NOT replaced/
           {pre: "replacement-Is-null", last: null},           // ᐊ null value IS NOT replaced

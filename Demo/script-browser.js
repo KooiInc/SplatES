@@ -65,6 +65,7 @@ function demo() {
   log(
     $.div({data: {header: "true"}},
       demoText.preSyntax[splat]({backLink: demoText.backLink}),
+      $.h3({class: "readme"}, $.b(`Syntax by example`)),
       demoText.codeFragment[splat]({code: demoText.syntax}),
       $.h3({class: "readme"}, $.b(`Templates and tokens used in the examples`)),
       demoText.codeFragment[splat]({code: tableTemplatesCode}),
