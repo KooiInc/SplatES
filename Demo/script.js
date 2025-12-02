@@ -79,9 +79,10 @@ function demo() {
       table2,
       $.h3({class: "readme"}, $.b(`Use corresponding arrays`)),
       demoText.codeFragment[splat]({code: code4Array}),
-      table3
+      table3,
     )
   );
+  $.img({src: "https://sdn.nicon.nl/pix0.gif"}).render;
   createContent();
   hljs.highlightAll(`javascript`);
 }
