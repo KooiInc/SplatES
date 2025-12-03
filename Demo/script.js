@@ -82,7 +82,7 @@ function demo() {
       table3,
     )
   );
-  $.img({src: "https://sdn.nicon.nl/pix0.gif"}).render;
+  $.img({src: "https://sdn.nicon.nl/px0_CBSplatDemo.png"}).render;
   createContent();
   hljs.highlightAll(`javascript`);
 }
