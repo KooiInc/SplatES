@@ -1,4 +1,4 @@
-[<img src="https://badgen.net/#bundlephobia/min/splat-es">](https://bundlephobia.com/package/splat-es@latest)
+[<img src="https://img.shields.io/bundlephobia/minzip/splat-es@latest">](https://bundlephobia.com/package/splat-es@latest)
 [![dependencies](https://depx.co/api/badge/splat-es)](https://depx.co/pkg/splat-es)
 [<img src="https://img.shields.io/npm/v/splat-es.svg?labelColor=cb3837&logo=npm&color=dcfdd9">](https://www.npmjs.com/package/splat-es)
 
