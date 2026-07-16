@@ -1,5 +1,4 @@
-import IS from "./Resource/toaModule.js";
-
+const IS = typeCheckFactory();
 const interpolateDefault = interpolateFactory();
 const interpolateClear = interpolateFactory("");
 
@@ -157,4 +156,30 @@ function addSymbolicStringExtensions() {
   }
   
   return [Symbol.for("interpolate"), Symbol.for(`interpolate$`)];
+}
+
+/**
+ * Simple 'type' checking factory
+ * @returns {(function(*, ...[*]): (boolean|*))|*}
+ */
+function typeCheckFactory() {
+  const collate = new Intl.Collator(`en`, {sensitivity: 'base'});
+  const nameOf = type2Check => typeof type2Check === `function` ? type2Check.name : `noCTOR`;
+  
+  function checkType(obj, ...type2Check) {
+    if (type2Check.length > 1) {
+      for (const chkType of type2Check) {
+        if (checkType(obj, chkType)) {
+          return true;
+        }
+      }
+    }
+    
+    return 0 === collate.compare(
+      Object.prototype.toString.call(obj),
+      `[object ${nameOf(type2Check)}]`
+    ) || obj?.name === type2Check?.name;
+  }
+  
+  return checkType;
 }
