@@ -170,6 +170,10 @@ function typeCheckFactory() {
     ? type2Check?.name || type2Check?.constructor?.name : `noCTOR`;
   
   function checkSingleType(obj, type2Check) {
+    if (type2Check === Number && (Number.isNaN(obj) || !Number.isFinite(obj))) {
+      return false;
+    }
+    
     return 0 === collate.compare(
       Object.prototype.toString.call(obj),
       `[object ${nameOf(type2Check)}]`
