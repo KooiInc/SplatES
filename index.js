@@ -2,6 +2,8 @@ const IS = typeCheckFactory();
 const interpolateDefault = interpolateFactory();
 const interpolateClear = interpolateFactory("");
 
+window.IS = IS
+
 export {
   interpolateDefault as default,
   interpolateClear,
@@ -164,7 +166,8 @@ function addSymbolicStringExtensions() {
  */
 function typeCheckFactory() {
   const collate = new Intl.Collator(`en`, {sensitivity: 'base'});
-  const nameOf = type2Check => typeof type2Check === `function` ? type2Check.name : `noCTOR`;
+  const nameOf = type2Check => typeof type2Check === `function`
+    ? type2Check?.name || type2Check?.constructor?.name : `noCTOR`;
   
   function checkType(obj, ...type2Check) {
     if (type2Check.length > 1) {
@@ -173,7 +176,10 @@ function typeCheckFactory() {
           return true;
         }
       }
+      return false;
     }
+    
+    type2Check = type2Check[0];
     
     return 0 === collate.compare(
       Object.prototype.toString.call(obj),
