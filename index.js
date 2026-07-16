@@ -185,7 +185,7 @@ function typeCheckFactory() {
       return false;
     }
     
-    return checkSingleType(obj, type2Check.shift());
+    return checkSingleType(obj, type2Check?.shift());
   }
   
   return checkType;
