@@ -2,8 +2,6 @@ const IS = typeCheckFactory();
 const interpolateDefault = interpolateFactory();
 const interpolateClear = interpolateFactory("");
 
-window.IS = IS
-
 export {
   interpolateDefault as default,
   interpolateClear,
