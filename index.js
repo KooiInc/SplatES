@@ -138,6 +138,7 @@ function interpolateFactory(defaultReplacer, specs = {}) {
  * Note: Symbols are unique, so there is no risk the
  * methods will conflict with native String methods or
  * methods in other ES libraries.
+ * @returns {symbol[]}
  */
 function addSymbolicStringExtensions() {
   if (!String.prototype[Symbol.for(`interpolate`)]) {
@@ -160,13 +161,19 @@ function addSymbolicStringExtensions() {
 
 /**
  * Simple 'type' checking factory
- * @returns {(function(*, ...[*]): (boolean|*))|*}
+ * @returns {function(*, ...[*]): (boolean|*)}
  */
 function typeCheckFactory() {
   const collate = new Intl.Collator(`en`, {sensitivity: 'base'});
   const nameOf = type2Check => typeof type2Check === `function`
     ? type2Check?.name || type2Check?.constructor?.name : `noCTOR`;
   
+  /**
+   * check obj to be of [type2Check]
+   * @param {*} obj
+   * @param {*} type2Check
+   * @returns {boolean}
+   */
   function checkSingleType(obj, type2Check) {
     if (type2Check === Number && (Number.isNaN(obj) || !Number.isFinite(obj))) {
       return false;
@@ -178,6 +185,12 @@ function typeCheckFactory() {
     ) || obj?.name === type2Check?.name;
   }
   
+  /**
+   *
+   * @param {*} obj
+   * @param {*[]} type2Check
+   * @returns {boolean}
+   */
   function checkType(obj, ...type2Check) {
     if (type2Check.length > 1) {
       for (const chkType of type2Check) {
