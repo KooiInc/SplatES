@@ -1,6 +1,5 @@
-const IS = typeCheckFactory();
 const interpolateDefault = interpolateFactory();
-const interpolateClear = interpolateFactory("");
+const interpolateClear = interpolateFactory({defaultReplacer: ""});
 
 export {
   interpolateDefault as default,
@@ -11,15 +10,15 @@ export {
 
 /**
  * Factory function to create an interpolate function with a default replacer.
- * @param {string|number} defaultReplacer - Default value to use for missing tokens.
- * @returns {Function} - The interpolation function.
+ * @param specs {defaultReplacer: string|number|undefined, useSymbolicExtensions: boolean|undefined}
+ * @returns {function(*, ...[*]): string}
  */
-function interpolateFactory(defaultReplacer, specs = {}) {
-  const {useSymbolicExtensions} = specs;
-  defaultReplacer = IS(defaultReplacer, String, Number) ?
-    String(defaultReplacer) : undefined;
+function interpolateFactory(specs = {}) {
+  let {defaultReplacer, useSymbolicExtensions} = specs;
+  defaultReplacer = isStringOrNumber(defaultReplacer)
+    ? String(defaultReplacer) : undefined;
   
-  if (!!useSymbolicExtensions) {
+  if (typeof useSymbolicExtensions === "boolean" && useSymbolicExtensions) {
     addSymbolicStringExtensions();
   }
   
@@ -40,11 +39,8 @@ function interpolateFactory(defaultReplacer, specs = {}) {
    * @returns {string} - The replacement value.
    */
   function invalidate(key, keyExists) {
-    if (keyExists && IS(defaultReplacer, String, Number)) {
-      return String(defaultReplacer);
-    }
-    
-    return `{${key}}`;
+    return keyExists && typeof defaultReplacer === `string`
+      ? String(defaultReplacer) : `{${key}}`;
   }
   
   /**
@@ -54,8 +50,10 @@ function interpolateFactory(defaultReplacer, specs = {}) {
    * @returns {string} - The replacement value.
    */
   function replacement(key, token) {
-    const isValid = key in token;
-    return isValid && IS(token[key], String, Number) ? String(token[key]) : invalidate(key, isValid);
+    const isValid = Object.hasOwn(token, key);
+    return isValid && isStringOrNumber(token[key])
+      ? String(token[key]) : invalidate(key, isValid);
+    
   }
   
   /**
@@ -116,6 +114,24 @@ function interpolateFactory(defaultReplacer, specs = {}) {
   }
   
   /**
+   * determine if [value] is a string or number
+   * @param value
+   * @returns {boolean}
+   */
+  function isStringOrNumber(value) {
+    return typeof value === 'string' || typeof value === 'number';
+  }
+  
+  /**
+   * determine if [value] is a key-value collection
+   * @param value
+   * @returns {boolean}
+   */
+  function isKeyValueCollection(value) {
+    return Object.prototype.toString.call(value) === '[object Object]';
+  }
+  
+  /**
    * Interpolate the string with the given tokens.
    * @param {string} str - The string with placeholders.
    * @param {object[]} tokens - The tokens containing replacement values.
@@ -123,12 +139,12 @@ function interpolateFactory(defaultReplacer, specs = {}) {
    */
   function interpolate(str, tokens) {
     const injected = !tokens?.length ? str : tokens
-      .filter(token => IS(token, Object))
+      .filter(token => isKeyValueCollection(token))
       .map((token, i) => replace(str, {...token, index: i + 1}))
       .join(``);
     
-    return IS(defaultReplacer, undefined)
-      ? injected : injected.replace(/\{[a-z_\d].+\}/gim, String(defaultReplacer));
+    return typeof defaultReplacer !== `string`
+      ? injected : injected.replace(/\{.+\}/gmi, defaultReplacer ?? ``);
   }
 }
 
@@ -157,51 +173,4 @@ function addSymbolicStringExtensions() {
   }
   
   return [Symbol.for("interpolate"), Symbol.for(`interpolate$`)];
-}
-
-/**
- * Simple 'type' checking factory
- * @returns {function(*, ...[*]): (boolean|*)}
- */
-function typeCheckFactory() {
-  const collate = new Intl.Collator(`en`, {sensitivity: 'base'});
-  const nameOf = type2Check => typeof type2Check === `function`
-    ? type2Check?.name || type2Check?.constructor?.name : `noCTOR`;
-  
-  /**
-   * check obj to be of [type2Check]
-   * @param {*} obj
-   * @param {*} type2Check
-   * @returns {boolean}
-   */
-  function checkSingleType(obj, type2Check) {
-    if (type2Check === Number && (Number.isNaN(obj) || !Number.isFinite(obj))) {
-      return false;
-    }
-    
-    return 0 === collate.compare(
-      Object.prototype.toString.call(obj),
-      `[object ${nameOf(type2Check)}]`
-    ) || obj?.name === type2Check?.name;
-  }
-  
-  /**
-   *
-   * @param {*} obj
-   * @param {*[]} type2Check
-   * @returns {boolean}
-   */
-  function checkType(obj, ...type2Check) {
-    if (type2Check.length > 1) {
-      for (const chkType of type2Check) {
-        if (checkSingleType(obj, chkType)) { return true; }
-      }
-      
-      return false;
-    }
-    
-    return checkSingleType(obj, type2Check?.shift());
-  }
-  
-  return checkType;
 }

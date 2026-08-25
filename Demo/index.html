@@ -19,7 +19,7 @@
 
         // create an interpolator function with a default replacement value
         // (replaces tokens with empty values with the default replacement value)
-        const splatES = interpolateFactory("¡no value!");
+        const splatES = interpolateFactory({defaultReplacer: "¡no value!"});
         //                                  ↑ missing values are replaced with this
         const templateStringEx = " hello {wrld} {univrs}\n";
 
