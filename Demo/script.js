@@ -1,8 +1,8 @@
-// $ etc. @https://github.com/KooiInc/SBHelpers
-// 20240612
-// -----------------------------------------------------------------------
+// $ see: https://codeberg.org/KooiInc/HtmlHelpers
 const { $, logFactory,  } =
   await import("https://unpkg.com/dynamic-html-helpers@latest/Bundle/htmlhelpers.min.js");
+
+//import {default as splatES, addSymbolicStringExtensions, interpolateFactory as splatF} from "../index.js";
 import {default as splatES, addSymbolicStringExtensions} from "../Bundle/index.min.js";
 
 // assign symbolic String.prototype extension
