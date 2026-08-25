@@ -87,10 +87,6 @@ function demo() {
   hljs.highlightAll(`javascript`);
 }
 
-function escHTML(htmlStr) {
-  return htmlStr.replace(/</g, `&lt;`).replace(/>/g, '&gt;');
-}
-
 function getNamesObj() {
   return [
     {pre: `Mary`, last: `Peterson`},

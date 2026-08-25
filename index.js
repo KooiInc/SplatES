@@ -144,7 +144,7 @@ function interpolateFactory(specs = {}) {
       .join(``);
     
     return typeof defaultReplacer !== `string`
-      ? injected : injected.replace(/\{.+\}/gmi, defaultReplacer ?? ``);
+      ? injected : injected.replace(/\{.+}/gmi, defaultReplacer ?? ``);
   }
 }
 
